@@ -1,10 +1,10 @@
 import pygame
 import random
-from PyDictionary import PyDictionary
+#from PyDictionary import PyDictionary
 import enchant
 import sys
 
-dictionary=PyDictionary()
+#dictionary=PyDictionary()
 
 # Initialize the pygame library
 pygame.init()
@@ -21,6 +21,7 @@ pygame.display.set_caption("WordHero")
 background_color = (135, 206, 235)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
+GREEN = (0, 255, 0)
 WHITE = (255, 255, 255)
 GRAY = (169,169,169)
 # FPS and timer
@@ -91,6 +92,7 @@ button_height = 60
 play_button = Button('PLAY', RED, (screen_width - button_width) // 2, (screen_height - button_height) // 2, button_width, button_height)
 exit_button = Button('EXIT', RED, (screen_width - button_width) // 2, (screen_height - button_height) // 2 + 100, button_width, button_height)
 attack_button = Button('Attack', RED,675,495,100,100)
+shuffle_button = Button('Shuffle', GREEN,675,610,100,100)
 #CREATE EACH BUTTON IN TABLE!!!
 table_width = 60
 table_height = 60
@@ -198,6 +200,7 @@ while running:
             
         if turn == "player":
             attack_button.clicked = False
+            shuffle_button.clicked = False
             #print(len(atk))
             if attack_button.draw(BLACK,0) and len(atk) >= 3:
                 if us.check(atk):
@@ -205,9 +208,23 @@ while running:
                     m1.showHp(800,25)
                     m1.Attack(p1)
                     p1.showHp(10,25)
-                    dictionary=PyDictionary(atk)
-                    print(dictionary.translateTo("th"))
+                    #turn = "monster"
+                    #print(dictionary.meaning(atk))
                     atk = ""
+            if shuffle_button.draw(GREEN,0):
+                pygame.time.wait(100)
+                table = []
+                stack = []
+                for i in range(4):
+                    for j in range(4):
+                        letter = random.choice(list(c.keys()))
+                        button = Button(letter, WHITE, j * table_width + 420, i * table_height + 480, table_width, table_height)
+                        table.append(button)
+                        stack.append(letter)
+
+                m1.Attack(p1)
+                p1.showHp(10,25)
+                
         #TABLE        
         for button in table:
             button.draw(BLACK, 0)
