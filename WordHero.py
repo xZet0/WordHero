@@ -197,7 +197,7 @@ while running:
                     #turn = "monster"
                     dictionary=PyDictionary(atk)
                     print(dictionary.translateTo("th"))
-                    atk = []
+                    atk = ""
                     #print(len(atk))
             turn = "player"
         #TABLE        
