@@ -53,6 +53,7 @@ class Button:
         pos = pygame.mouse.get_pos()
                 
         pygame.draw.rect(screen, self.color, (self.x, self.y, self.width, self.height), scale)
+        pygame.draw.rect(screen, BLACK, (self.x, self.y, self.width, self.height), 1)
         img = font.render(self.text, True, text_color)
         img_rect = img.get_rect(center=(self.x + self.width / 2, self.y + self.height / 2))
         screen.blit(img, img_rect)
@@ -67,7 +68,7 @@ class Button:
             pygame.draw.rect(screen, self.color_clicked, (self.x, self.y, self.width, self.height), scale)
             #self.clicked = False
         #else:
-            #self.clicked = True
+            #action = False
         
         #return action
         return action
@@ -150,6 +151,7 @@ h = 0
 ok = []
 no = 0
 x = 1
+clear = False
 running = True
 while running:
     
@@ -161,7 +163,7 @@ while running:
             if event.button == 1:  # Check for left mouse button click
                 for button in table:
                     action = button.draw(BLACK, 0)
-                    pygame.time.wait(10000)
+                    pygame.time.wait(10)
                     if action:
                         h += 1
                         print('Clicked on:', button.text)    
@@ -183,14 +185,13 @@ while running:
                     if actions:
                         pygame.time.wait(10)
                         g[0].color_clicked = background_color
-                        #kuy = Button(g[0].text, GRAY, g[1], g[2], table_height, table_height)
                         kuy = Button(g[0].text, WHITE, g[1], g[2], table_height, table_height)
                         table.append(kuy)
                         stack.append(g[0].text)
                         words.remove(g[0].text)
                         print('s',stack)
                         print('w',words)
-                        h=0
+                        h-=1
                         atk = atk[:-1]
                         print('atk:',atk)
                         #print(g[1])
@@ -225,25 +226,29 @@ while running:
         if turn == "player":
             attack_button.clicked = False
             shuffle_button.clicked = False
+            #print('HAI')
             #print(len(atk))
             if attack_button.draw(BLACK,0): #and len(atk) >= 3:
-                    pygame.time.wait(100)
+                pygame.time.wait(100)
                 #if us.check(atk):
-                    p1.Attack(m1)
-                    m1.showHp(800,25)
-                    m1.Attack(p1)
-                    p1.showHp(10,25)
-                    #dictionary=PyDictionary(atk)
-                    #o = dictionary.meaning(atk)
-                    #print(o['Noun'][0])
-                    atk = ""
-                    print(m1.hp)
-                    if m1.hp <= 0:
-                        x = x + 1
-                        p1.hp = p1.maxhp
-                        m1 = Monster(25+(x*25),10+(x*10))
-
-            if shuffle_button.draw(BLACK,0):
+                p1.Attack(m1)
+                m1.showHp(800,25)
+                m1.Attack(p1)
+                p1.showHp(10,25)
+                #words=[]
+                #dictionary=PyDictionary(atk)
+                #o = dictionary.meaning(atk)
+                #print(o['Noun'][0])
+                atk = ""
+                print(m1.hp)
+                if m1.hp <= 0:
+                    x = x + 1
+                    p1.hp = p1.maxhp
+                    m1 = Monster(25+(x*25),10+(x*10))
+                clear = True
+                print('AGAIN')
+                #print(clear)
+            if shuffle_button.draw(BLACK,0) and len(words) == 0:
                 pygame.time.wait(100)
                 table = []
                 stack = []
@@ -261,9 +266,13 @@ while running:
         for button in table:
             button.draw(BLACK, 0)
         
+        
+        
         for but in n:
             but[0].draw(BLACK,0)
         
+        #pygame.draw.rect(screen, background_color,(x[1],x[2],60,60))
+            
         #for bda in ok:
             #bda.draw(BLACK, 0)
         
