@@ -135,7 +135,7 @@ class Monster(Player):
 
 #Player
 p1 = Player(100,20)
-m1 = Monster(50,25)
+m1 = Monster(50,20)
 
 
 
@@ -146,6 +146,7 @@ turn = "player"
 print(stack)
 n = []
 h = 0
+x = 1
 running = True
 while running:
     
@@ -202,8 +203,9 @@ while running:
             attack_button.clicked = False
             shuffle_button.clicked = False
             #print(len(atk))
-            if attack_button.draw(BLACK,0) and len(atk) >= 3:
-                if us.check(atk):
+            if attack_button.draw(BLACK,0): #and len(atk) >= 3:
+                    pygame.time.wait(100)
+                #if us.check(atk):
                     p1.Attack(m1)
                     m1.showHp(800,25)
                     m1.Attack(p1)
@@ -211,6 +213,12 @@ while running:
                     #turn = "monster"
                     #print(dictionary.meaning(atk))
                     atk = ""
+                    print(m1.hp)
+                    if m1.hp <= 0:
+                        x = x + 1
+                        p1.hp = p1.maxhp
+                        m1 = Monster(25+(x*25),10+(x*10))
+
             if shuffle_button.draw(GREEN,0):
                 pygame.time.wait(100)
                 table = []
