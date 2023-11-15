@@ -44,6 +44,7 @@ class Button:
         self.height = height
         self.rect = pygame.Rect(x, y, width, height)
         self.clicked = False
+        self.color_clicked = GRAY
         #self.action = False
         
     def draw(self, text_color, scale):
@@ -62,7 +63,7 @@ class Button:
                 #self.action = True
                 action = True
         if self.clicked:
-            pygame.draw.rect(screen, GRAY, (self.x, self.y, self.width, self.height), scale)
+            pygame.draw.rect(screen, self.color_clicked, (self.x, self.y, self.width, self.height), scale)
             #self.clicked = False
         #else:
             #self.clicked = True
@@ -144,6 +145,8 @@ turn = "player"
 print(stack)
 n = []
 h = 0
+ok = []
+no = 0
 running = True
 while running:
     
@@ -169,9 +172,13 @@ while running:
                         atk += button.text
                         print(atk)
                         #turn = "monster"  # Switch to monster turn after player's turn
-                        
-
-                        
+                for button in n:
+                    actions = button.draw(BLACK, 0)
+                    if actions:
+                        button.color_clicked = background_color
+                        no += 1
+                        kuy = Button(button.text, GRAY, no*100, 400,table_height, table_height) 
+                        ok.append(kuy)
     screen.fill(background_color)
     
     if game_state == 'menu':
@@ -194,7 +201,9 @@ while running:
         
         for but in n:
             but.draw(BLACK,0)
-            
+        
+        for bda in ok:
+            bda.draw(BLACK, 0)
             
         if turn == "player":
             attack_button.clicked = False
@@ -206,7 +215,8 @@ while running:
                     m1.Attack(p1)
                     p1.showHp(10,25)
                     dictionary=PyDictionary(atk)
-                    print(dictionary.translateTo("th"))
+                    o = dictionary.meaning(atk)
+                    print(o['Noun'][0])
                     atk = ""
         #TABLE        
         for button in table:
