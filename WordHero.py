@@ -134,14 +134,47 @@ class Player:
         Target.hp -= self.Damage
 
     def show_info(self):
-        qwer = pygame.Rect(800, 480, 280, 240)
-        pygame.draw.rect(screen, (124, 0, 0), qwer)
+        RD_rect = pygame.Rect(800, 480, 280, 240)
+        pygame.draw.rect(screen, (124, 0, 0), RD_rect)
         dmg_text = str(self.Damage)
         name_text = "enemy name"
         enemy_name = font.render(name_text,True,(0,0,0))
         dmg = font.render(dmg_text,True,(0,0,0))
         screen.blit(enemy_name,(850,500))
         screen.blit(dmg,(940,600))
+    
+    def show_meaning(self):
+        font20 = pygame.font.Font(None, 20)
+        LD_rect = pygame.Rect(0, 480, 420, 240)
+        pygame.draw.rect(screen, (124, 0, 0), LD_rect)
+        word_text = "word"
+        text_noun = "noun meaning p p p p p p pppppppppppppp pp p p p p p p p p p p p p p p p p"
+        text_verb = "verb meaning very very long long very very long long very very long long very very long long very very long long very very long long very very long long very very long long "
+        draw_wrapped_text(text_noun, font20, (0,0,0), screen, 5, 560, 410)
+        draw_wrapped_text(text_verb, font20, (0,0,0), screen, 5, 620, 410)
+
+
+def draw_wrapped_text(text, font, color, surface, x, y, max_width):
+    words = [word.split(' ') for word in text.splitlines()]  # แบ่งข้อความเป็นคำ
+    space = font.size(' ')[0]  # ขนาดของช่องว่างระหว่างคำ
+
+    x_pos, y_pos = x, y
+    for line in words:
+        for word in line:
+            word_surface = font.render(word, True, color)
+            word_width, word_height = word_surface.get_size()
+
+            if x_pos + word_width >= x + max_width:
+                    x_pos = x  # ย้ายไปที่จุดเริ่มต้นของบรรทัดถัดไป
+                    y_pos += word_height  # ขึ้นบรรทัดใหม่
+
+            surface.blit(word_surface, (x_pos, y_pos))
+            x_pos += word_width + space
+        x_pos = x
+        y_pos += word_height
+
+
+
 
 
 
@@ -176,7 +209,7 @@ while running:
             if event.button == 1:  # Check for left mouse button click
                 for button in table:
                     action = button.draw(BLACK, 0)
-                    pygame.time.wait(10000)
+                    pygame.time.wait(10)
                     if action:
                         h += 1
                         print('Clicked on:', button.text)    
@@ -227,6 +260,7 @@ while running:
         screen.fill(background_color)
         pygame.draw.rect(screen, GRAY, (0, 480, 1080, 300))
         m1.show_info()
+        m1.show_meaning()
         p1.Load_Skin(100,200)
         p1.showHp(10,25)
         m1.Load_Skin(800,200)
