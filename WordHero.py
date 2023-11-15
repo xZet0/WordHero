@@ -184,7 +184,7 @@ class Monster(Player):
 
 #Player
 p1 = Player(100,20)
-m1 = Monster(50,20)
+m1 = Monster(20,10)
 
 
 
@@ -283,15 +283,15 @@ while running:
                     m1.showHp(800,25)
                     m1.Attack(p1)
                     p1.showHp(10,25)
-                    #dictionary=PyDictionary(atk)
-                    #o = dictionary.meaning(atk)
-                    #print(o['Noun'][0])
+                    #turn = "monster"
+                    #print(dictionary.meaning(atk))
                     atk = ""
-                    print(m1.hp)
+                    words = []
+                    #print(m1.hp)
                     if m1.hp <= 0:
                         x = x + 1
                         p1.hp = p1.maxhp
-                        m1 = Monster(25+(x*25),10+(x*10))
+                        m1 = Monster(20+(x*5),10+(x*5))
 
             if shuffle_button.draw(BLACK,0):
                 pygame.time.wait(100)
