@@ -150,6 +150,8 @@ class Player:
         word_text = "word"
         text_noun = "noun meaning p p p p p p pppppppppppppp pp p p p p p p p p p p p p p p p p"
         text_verb = "verb meaning very very long long very very long long very very long long very very long long very very long long very very long long very very long long very very long long "
+        rendered_word_text = font.render(word_text, True, (0, 0, 0))
+        screen.blit(rendered_word_text,(20,500))
         draw_wrapped_text(text_noun, font20, (0,0,0), screen, 5, 560, 410)
         draw_wrapped_text(text_verb, font20, (0,0,0), screen, 5, 620, 410)
 
