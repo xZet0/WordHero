@@ -1,10 +1,10 @@
 import pygame
 import random
-from PyDictionary import PyDictionary
+#from PyDictionary import PyDictionary
 import enchant
 import sys
 
-dictionary=PyDictionary()
+#dictionary=PyDictionary()
 
 # Initialize the pygame library
 pygame.init()
@@ -21,6 +21,7 @@ pygame.display.set_caption("WordHero")
 background_color = (135, 206, 235)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
+GREEN = (0, 255, 0)
 WHITE = (255, 255, 255)
 GRAY = (169,169,169)
 # FPS and timer
@@ -92,6 +93,7 @@ button_height = 60
 play_button = Button('PLAY', RED, (screen_width - button_width) // 2, (screen_height - button_height) // 2, button_width, button_height)
 exit_button = Button('EXIT', RED, (screen_width - button_width) // 2, (screen_height - button_height) // 2 + 100, button_width, button_height)
 attack_button = Button('Attack', RED,675,495,100,100)
+shuffle_button = Button('Shuffle', GREEN,675,610,100,100)
 #CREATE EACH BUTTON IN TABLE!!!
 table_width = 60
 table_height = 60
@@ -134,7 +136,7 @@ class Monster(Player):
 
 #Player
 p1 = Player(100,20)
-m1 = Monster(50,25)
+m1 = Monster(50,20)
 
 
 
@@ -147,6 +149,7 @@ n = []
 h = 0
 ok = []
 no = 0
+x = 1
 running = True
 while running:
     
@@ -158,6 +161,7 @@ while running:
             if event.button == 1:  # Check for left mouse button click
                 for button in table:
                     action = button.draw(BLACK, 0)
+                    pygame.time.wait(10000)
                     if action:
                         h += 1
                         print('Clicked on:', button.text)    
@@ -166,22 +170,31 @@ while running:
                         print('x',((button.x-420)/60))
                         print('y',((button.y-480)/60))
                         stack.remove(button.text)
+                        table.remove(button)
                         words.append(button.text)
                         print(stack)
                         print(words)
                         atk += button.text
                         print(atk)
                         #turn = "monster"  # Switch to monster turn after player's turn
-                        print(n)
+                        #print(n)
                 for g in n:
                     actions = g[0].draw(BLACK, 0)
                     if actions:
+                        pygame.time.wait(10)
                         g[0].color_clicked = background_color
                         #kuy = Button(g[0].text, GRAY, g[1], g[2], table_height, table_height)
                         kuy = Button(g[0].text, WHITE, g[1], g[2], table_height, table_height)
-                        ok.append(kuy)
-                        print(g[1])
-                        print(g[2])
+                        table.append(kuy)
+                        stack.append(g[0].text)
+                        words.remove(g[0].text)
+                        print('s',stack)
+                        print('w',words)
+                        h=0
+                        atk = atk[:-1]
+                        print('atk:',atk)
+                        #print(g[1])
+                        #print(g[2])
                               
     screen.fill(background_color)
     
@@ -211,17 +224,39 @@ while running:
             
         if turn == "player":
             attack_button.clicked = False
+            shuffle_button.clicked = False
             #print(len(atk))
-            if attack_button.draw(BLACK,0) and len(atk) >= 3:
-                if us.check(atk):
+            if attack_button.draw(BLACK,0): #and len(atk) >= 3:
+                    pygame.time.wait(100)
+                #if us.check(atk):
                     p1.Attack(m1)
                     m1.showHp(800,25)
                     m1.Attack(p1)
                     p1.showHp(10,25)
-                    dictionary=PyDictionary(atk)
-                    o = dictionary.meaning(atk)
-                    print(o['Noun'][0])
+                    #dictionary=PyDictionary(atk)
+                    #o = dictionary.meaning(atk)
+                    #print(o['Noun'][0])
                     atk = ""
+                    print(m1.hp)
+                    if m1.hp <= 0:
+                        x = x + 1
+                        p1.hp = p1.maxhp
+                        m1 = Monster(25+(x*25),10+(x*10))
+
+            if shuffle_button.draw(BLACK,0):
+                pygame.time.wait(100)
+                table = []
+                stack = []
+                for i in range(4):
+                    for j in range(4):
+                        letter = random.choice(list(c.keys()))
+                        button = Button(letter, WHITE, j * table_width + 420, i * table_height + 480, table_width, table_height)
+                        table.append(button)
+                        stack.append(letter)
+
+                m1.Attack(p1)
+                p1.showHp(10,25)
+                
         #TABLE        
         for button in table:
             button.draw(BLACK, 0)
@@ -229,8 +264,8 @@ while running:
         for but in n:
             but[0].draw(BLACK,0)
         
-        for bda in ok:
-            bda.draw(BLACK, 0)
+        #for bda in ok:
+            #bda.draw(BLACK, 0)
         
         
         #BG_TABLE
