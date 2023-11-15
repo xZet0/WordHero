@@ -147,9 +147,9 @@ turn = "player"
 print(stack)
 n = []
 h = 0
-x = 1
 ok = []
 no = 0
+x = 1
 running = True
 while running:
     
@@ -161,6 +161,7 @@ while running:
             if event.button == 1:  # Check for left mouse button click
                 for button in table:
                     action = button.draw(BLACK, 0)
+                    pygame.time.wait(10)
                     if action:
                         h += 1
                         print('Clicked on:', button.text)    
@@ -169,22 +170,31 @@ while running:
                         print('x',((button.x-420)/60))
                         print('y',((button.y-480)/60))
                         stack.remove(button.text)
+                        table.remove(button)
                         words.append(button.text)
                         print(stack)
                         print(words)
                         atk += button.text
                         print(atk)
                         #turn = "monster"  # Switch to monster turn after player's turn
-                        print(n)
+                        #print(n)
                 for g in n:
                     actions = g[0].draw(BLACK, 0)
                     if actions:
+                        pygame.time.wait(10)
                         g[0].color_clicked = background_color
                         #kuy = Button(g[0].text, GRAY, g[1], g[2], table_height, table_height)
                         kuy = Button(g[0].text, WHITE, g[1], g[2], table_height, table_height)
-                        ok.append(kuy)
-                        print(g[1])
-                        print(g[2])
+                        table.append(kuy)
+                        stack.append(g[0].text)
+                        words.remove(g[0].text)
+                        print('s',stack)
+                        print('w',words)
+                        h=0
+                        atk = atk[:-1]
+                        print('atk:',atk)
+                        #print(g[1])
+                        #print(g[2])
                               
     screen.fill(background_color)
     
@@ -232,7 +242,7 @@ while running:
                         p1.hp = p1.maxhp
                         m1 = Monster(25+(x*25),10+(x*10))
 
-            if shuffle_button.draw(GREEN,0):
+            if shuffle_button.draw(BLACK,0):
                 pygame.time.wait(100)
                 table = []
                 stack = []
@@ -253,8 +263,8 @@ while running:
         for but in n:
             but[0].draw(BLACK,0)
         
-        for bda in ok:
-            bda.draw(BLACK, 0)
+        #for bda in ok:
+            #bda.draw(BLACK, 0)
         
         
         #BG_TABLE
