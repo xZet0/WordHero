@@ -1,7 +1,10 @@
 import pygame
 import random
+from PyDictionary import PyDictionary
 import enchant
 import sys
+
+dictionary=PyDictionary()
 
 # Initialize the pygame library
 pygame.init()
@@ -155,7 +158,7 @@ while running:
                     if action:
                         h += 1
                         print('Clicked on:', button.text)    
-                        k = Button(button.text, GRAY, h *60+250, 50 , table_width, table_height)
+                        k = Button(button.text, GRAY, h *60, 100 , table_width, table_height)
                         n.append(k)
                         print('x',((button.x-420)/60))
                         print('y',((button.y-480)/60))
@@ -166,7 +169,7 @@ while running:
                         atk += button.text
                         print(atk)
                         #turn = "monster"  # Switch to monster turn after player's turn
-                        break  # Exit the loop after handling one button click
+                        
 
                         
     screen.fill(background_color)
@@ -195,15 +198,16 @@ while running:
             
         if turn == "player":
             attack_button.clicked = False
+            #print(len(atk))
             if attack_button.draw(BLACK,0) and len(atk) >= 3:
                 if us.check(atk):
                     p1.Attack(m1)
                     m1.showHp(800,25)
                     m1.Attack(p1)
                     p1.showHp(10,25)
-                    atk = ''
-                    turn = "monster"
-            turn = "player"
+                    dictionary=PyDictionary(atk)
+                    print(dictionary.translateTo("th"))
+                    atk = ""
         #TABLE        
         for button in table:
             button.draw(BLACK, 0)
