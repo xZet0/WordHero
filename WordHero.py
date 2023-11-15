@@ -139,6 +139,8 @@ m1 = Monster(50,25)
 game_state = "menu"
 turn = "player"
 print(stack)
+n = []
+h = 0
 running = True
 while running:
     
@@ -151,7 +153,12 @@ while running:
                 for button in table:
                     action = button.draw(BLACK, 0)
                     if action:
-                        print('Clicked on:', button.text)
+                        h += 1
+                        print('Clicked on:', button.text)    
+                        k = Button(button.text, GRAY, h *60+250, 50 , table_width, table_height)
+                        n.append(k)
+                        print('x',((button.x-420)/60))
+                        print('y',((button.y-480)/60))
                         stack.remove(button.text)
                         words.append(button.text)
                         print(stack)
@@ -182,12 +189,18 @@ while running:
         m1.Load_Skin(800,200)
         m1.showHp(800,25)
         
+        for but in n:
+            but.draw(BLACK,0)
+            
+            
         if turn == "player":
             attack_button.clicked = False
             if attack_button.draw(BLACK,0) and len(atk) >= 3:
                 if us.check(atk):
                     p1.Attack(m1)
                     m1.showHp(800,25)
+                    m1.Attack(p1)
+                    p1.showHp(10,25)
                     atk = ''
                     turn = "monster"
             turn = "player"
