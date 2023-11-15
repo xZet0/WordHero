@@ -71,6 +71,10 @@ class Button:
         
         #return action
         return action
+    
+
+
+
 
 table = []
 c = {
@@ -128,6 +132,17 @@ class Player:
 
     def Attack(self, Target):
         Target.hp -= self.Damage
+
+    def show_info(self):
+        qwer = pygame.Rect(800, 480, 280, 240)
+        pygame.draw.rect(screen, (124, 0, 0), qwer)
+        dmg_text = str(self.Damage)
+        name_text = "enemy name"
+        enemy_name = font.render(name_text,True,(0,0,0))
+        dmg = font.render(dmg_text,True,(0,0,0))
+        screen.blit(enemy_name,(850,500))
+        screen.blit(dmg,(940,600))
+
 
 
 class Monster(Player):
@@ -211,6 +226,7 @@ while running:
         #This for playing
         screen.fill(background_color)
         pygame.draw.rect(screen, GRAY, (0, 480, 1080, 300))
+        m1.show_info()
         p1.Load_Skin(100,200)
         p1.showHp(10,25)
         m1.Load_Skin(800,200)
@@ -271,7 +287,8 @@ while running:
         for i in range(4):
             for j in range(4):
                 pygame.draw.rect(screen, BLACK, (j * table_width + 420, i * table_height + 480, table_width, table_height), 1)    
-                
+
+
         
     pygame.display.flip()
     timer.tick(fps)
