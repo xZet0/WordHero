@@ -162,7 +162,7 @@ while running:
                         h += 1
                         print('Clicked on:', button.text)    
                         k = Button(button.text, GRAY, h *60, 100 , table_width, table_height)
-                        n.append(k)
+                        n.append((k,button.x,button.y))
                         print('x',((button.x-420)/60))
                         print('y',((button.y-480)/60))
                         stack.remove(button.text)
@@ -172,13 +172,17 @@ while running:
                         atk += button.text
                         print(atk)
                         #turn = "monster"  # Switch to monster turn after player's turn
-                for button in n:
-                    actions = button.draw(BLACK, 0)
+                        print(n)
+                for g in n:
+                    actions = g[0].draw(BLACK, 0)
                     if actions:
-                        button.color_clicked = background_color
-                        no += 1
-                        kuy = Button(button.text, GRAY, no*100, 400,table_height, table_height) 
+                        g[0].color_clicked = background_color
+                        #kuy = Button(g[0].text, GRAY, g[1], g[2], table_height, table_height)
+                        kuy = Button(g[0].text, WHITE, g[1], g[2], table_height, table_height)
                         ok.append(kuy)
+                        print(g[1])
+                        print(g[2])
+                              
     screen.fill(background_color)
     
     if game_state == 'menu':
@@ -199,11 +203,11 @@ while running:
         m1.Load_Skin(800,200)
         m1.showHp(800,25)
         
-        for but in n:
-            but.draw(BLACK,0)
-        
-        for bda in ok:
-            bda.draw(BLACK, 0)
+        #hoo = 0
+        #for i in words:
+            #Button(i, GRAY, hoo*60, 50,60,60).draw(BLACK,0)
+            #hoo +=1 
+            
             
         if turn == "player":
             attack_button.clicked = False
@@ -221,6 +225,13 @@ while running:
         #TABLE        
         for button in table:
             button.draw(BLACK, 0)
+        
+        for but in n:
+            but[0].draw(BLACK,0)
+        
+        for bda in ok:
+            bda.draw(BLACK, 0)
+        
         
         #BG_TABLE
         for i in range(4):
