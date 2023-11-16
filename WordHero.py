@@ -146,9 +146,10 @@ m1 = Monster(50,20)
 # Game loop
 game_state = "menu"
 turn = "player"
-print(stack)
-n = []
-h = 0
+#print(stack)
+stack_button = []
+clicked_times = 0
+
 ok = []
 no = 0
 x = 1
@@ -162,47 +163,61 @@ while running:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:  # Check for left mouse button click
+                
+                #Click in table
                 for button in table:
-                    action = button.draw(BLACK, 0)
+                    draw_button_inTable = button.draw(BLACK, 0)
                     pygame.time.wait(10)
-                    if action:
-                        h += 1
-                        #print('Clicked on:', button.text)    
-                        k = Button(button.text, GRAY, h *60, 100 , table_width, table_height)
-                        n.append((k,button.x,button.y))
-                        #print('x',((button.x-420)/60))
-                        #print('y',((button.y-480)/60))
+                    #Clicked
+                    if draw_button_inTable:
+                        clicked_times += 1
+                        #print('clicked_times_intable',clicked_times)
                         stack.remove(button.text)
                         table.remove(button)
                         words.append(button.text)
-                        #print(stack)
-                        #print(words)
+                        create_button_onstack = Button(button.text, GRAY, clicked_times *60, 100 , table_width, table_height)
+                        stack_button.append((create_button_onstack,button.x,button.y,clicked_times))
                         atk += button.text
-                        #print(atk)
-                        #turn = "monster"  # Switch to monster turn after player's turn
-                        #print(n)
-                        #print(len(n))
-                for g in n:
-                    actions = g[0].draw(BLACK, 0)
-                    if actions:
+                        #print('words:',words,len(words))
+                        print('stack:',stack,len(stack))
+                        #print('table:\n',table,len(table))
+                        #print('stackbutton:\n',stack_button,len(stack_button))
+                        
+                
+                for button in stack_button:
+                    draw_button_inStack = button[0].draw(BLACK, 0)
+                    if draw_button_inStack:
                         pygame.time.wait(10)
-                        if g[0].text == '':
+                        if button[0].text == '':
                             #print('nothing')
                             continue
-                        g[0].color_clicked = background_color
-                        kuy = Button(g[0].text, WHITE, g[1], g[2], table_height, table_height)
-                        table.append(kuy)
-                        stack.append(g[0].text)
-                        words.remove(g[0].text)
-                        #print('s',stack)
-                        #print('w',words)
-                        h-=1
+                        clicked_times-=1
+                        button[0].color_clicked = background_color
+                        create_button_intable = Button(button[0].text, WHITE, button[1], button[2], table_height, table_height)
+                        table.append(create_button_intable)
+                        #stack.append(button[0].text)
+                        #words.remove(button[0].text)
+                        #print('clicked',clicked_times)
+                        print('pos',button[3])
+                        print('bstackbutton:',len(stack_button))
+                        if button[3] <= len(stack_button):
+                            for i in range(button[3]-1,len(stack_button)):
+                                stack_button.pop()
+                                words.pop()
+                                stack.append('test')
+                        
+                        #for i in range(button[3]):
+                            #print(i)
+                        print('astackbutton:',len(stack_button))
                         atk = atk[:-1]
-                        #print('atk:',atk)
-                        #print(g[1])
-                        #print(g[2])
-                        n.remove(g)
-                        #print('a',len(n))
+                        #stack_button.remove(button)
+                        #stack_button.pop()
+                        print('words:',words,len(words))
+                        print('stack:',stack,len(stack))
+                        #print('table:\n',table,len(table))
+                        #print('stackbutton:\n',stack_button,len(stack_button))
+    
+    #SET BACKGROUND
     screen.fill(background_color)
     
     if game_state == 'menu':
@@ -230,22 +245,22 @@ while running:
             
             
         if turn == "player":
-            #attack_button.clicked = False
+            attack_button.clicked = False
             shuffle_button.clicked = False
             #print('HAI')
             #print(len(atk))
-            if attack_button.draw(BLACK,0) and len(atk) >= 3:
+            if attack_button.draw(BLACK,0): #and len(atk) >= 3:
                 pygame.time.wait(100)
-                if us.check(atk):
-                    p1.Attack(m1)
-                    m1.showHp(800,25)
-                    m1.Attack(p1)
-                    p1.showHp(10,25)
-                    words=[]
-                    dictionary=PyDictionary(atk)
-                    o = dictionary.meaning(atk)
-                    print(o['Noun'][0])
-                    atk = ""
+                #if us.check(atk):
+                p1.Attack(m1)
+                m1.showHp(800,25)
+                m1.Attack(p1)
+                p1.showHp(10,25)
+                words=[]
+                    #dictionary=PyDictionary(atk)
+                    #o = dictionary.meaning(atk)
+                    #print(o['Noun'][0])
+                atk = ""
                 #print(m1.hp)
                 if m1.hp <= 0:
                     x = x + 1
@@ -254,7 +269,7 @@ while running:
                 h=0   
                 clear = True
                 
-                for button in n:
+                for button in stack_button:
                     #n.remove(button)
                     button[0].color = background_color
                     button[0].color_clicked = background_color
@@ -269,14 +284,15 @@ while running:
                     nahee = Button(letter,WHITE,button[1], button[2], table_width, table_height)
                     table.append(nahee)
                     stack.append(letter)  
-                n=[]
+                stack_button=[]
             #else:
                 #attack_button.clicked = False
-                #print('b',len(n))    
+                #print(stack_button)    
                 #print(stack)
                 #print(words)
                 #print(atk)
                 #print(clear)
+            #print(stack_button)
             if shuffle_button.draw(BLACK,0) and len(words) == 0:
                 pygame.time.wait(100)
                 table = []
@@ -297,7 +313,7 @@ while running:
         
         
         
-        for but in n:
+        for but in stack_button:
             but[0].draw(BLACK,0)
             #n.remove(but)
         #pygame.draw.rect(screen, background_color,(x[1],x[2],60,60))
