@@ -4,7 +4,7 @@ from PyDictionary import PyDictionary
 import enchant
 import sys
 
-#dictionary=PyDictionary()
+dictionary=PyDictionary()
 
 # Initialize the pygame library
 pygame.init()
@@ -152,18 +152,6 @@ class Charecter:
         dmg = font.render(dmg_text,True,(0,0,0))
         screen.blit(enemy_name,(850,500))
         screen.blit(dmg,(940,600))
-    
-    def show_meaning(self):
-        font20 = pygame.font.Font(None, 20)
-        LD_rect = pygame.Rect(0, 480, 420, 240)
-        pygame.draw.rect(screen, (124, 0, 0), LD_rect)
-        word_text = "word"
-        text_noun = "noun meaning p p p p p p pppppppppppppp pp p p p p p p p p p p p p p p p p"
-        text_verb = "verb meaning very very long long very very long long very very long long very very long long very very long long very very long long very very long long very very long long "
-        rendered_word_text = font.render(word_text, True, (0, 0, 0))
-        screen.blit(rendered_word_text,(20,500))
-        draw_wrapped_text(text_noun, font20, (0,0,0), screen, 5, 560, 410)
-        draw_wrapped_text(text_verb, font20, (0,0,0), screen, 5, 620, 410)
 
 
 def draw_wrapped_text(text, font, color, surface, x, y, max_width):
@@ -184,6 +172,18 @@ def draw_wrapped_text(text, font, color, surface, x, y, max_width):
             x_pos += word_width + space
         x_pos = x
         y_pos += word_height
+
+def show_meaning(word, noun, verb):
+        font20 = pygame.font.Font(None, 20)
+        LD_rect = pygame.Rect(0, 480, 420, 240)
+        pygame.draw.rect(screen, (124, 0, 0), LD_rect)
+        word_text = word
+        text_noun = noun
+        text_verb = verb
+        rendered_word_text = font.render(word_text, True, (0, 0, 0))
+        screen.blit(rendered_word_text,(20,500))
+        draw_wrapped_text(text_noun, font20, (0,0,0), screen, 5, 560, 410)
+        draw_wrapped_text(text_verb, font20, (0,0,0), screen, 5, 620, 410)
 
 
 
@@ -206,6 +206,8 @@ stack_button = []
 gameover_button = []
 clicked_times = 0
 started = False
+atk, atknoun, atkverb = '','',''
+tempatk, tempatknoun, tempatkverb = '','',''
 
 running = True
 while running:
@@ -281,7 +283,7 @@ while running:
             started = True
 
         m1.show_info()
-        m1.show_meaning()
+        show_meaning(tempatk,tempatknoun,tempatkverb)
         screen.blit(dmg_icon,(870,587))
         p1.showHp(10,25)
         m1.showHp(800,25)
@@ -290,11 +292,7 @@ while running:
             
         if turn == "player":
             #GAMEOVER
-            if p1.hp <= 0:
-                #Go menu or play again
-                #create rectangle on center of screen and then create 2 button menu or play again
-
-                
+            if p1.hp <= 0:   
 
                 #if go menu:
                 if mainmenu_button.draw(BLACK,0):
@@ -304,8 +302,7 @@ while running:
                     mainmenu_button = Button('Main Menu', RED,440,350,200,100)
                     started = False
                     game_state = 'menu'
-
-                
+    
                 if playagain_button.draw(BLACK,0):
                     pygame.time.wait(100)
                     p1 = Charecter(100,20)
@@ -330,14 +327,34 @@ while running:
                     
                     #Stone plz do this
                     #On class Charecter text is meaning!!
-                    #dictionary=PyDictionary(atk)
-                    #o = dictionary.meaning(atk)
+                    dictionary=PyDictionary(atk)
+                    o = dictionary.meaning(atk)
                     #print(o['Noun'][0])
+
+                    if o != None:
+
+                        tempatk = atk
+
+                        if 'Noun' in o.keys():
+                            atknoun = o['Noun'][0]
+                            tempatknoun = atknoun
+                            print('noun:',atknoun)
+
+                        if 'Verb' in o.keys():
+                            atkverb = o['Verb'][0]
+                            tempatkverb = atkverb
+                            print('verb:',atkverb)
+
+                    else:
+                        o = 0
+                    
+                    if o == 0:
+                        atknoun = '0'
+                        atkverb = '0'
                     
                     atk = ''
-                    
-                    
-                    
+                    atknoun = ''
+                    atkverb = ''
                     
                     for button in stack_button:
                         letter = random.choice(list(letter_values.keys()))
