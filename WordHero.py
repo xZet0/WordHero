@@ -127,6 +127,52 @@ class Charecter:
     def Attack(self, Target):
         Target.hp -= self.Damage
 
+    def show_info(self):
+        RD_rect = pygame.Rect(800, 480, 280, 240)
+        pygame.draw.rect(screen, (124, 0, 0), RD_rect)
+        dmg_text = str(self.Damage)
+        name_text = "enemy name"
+        enemy_name = font.render(name_text,True,(0,0,0))
+        dmg = font.render(dmg_text,True,(0,0,0))
+        screen.blit(enemy_name,(850,500))
+        screen.blit(dmg,(940,600))
+    
+    def show_meaning(self):
+        font20 = pygame.font.Font(None, 20)
+        LD_rect = pygame.Rect(0, 480, 420, 240)
+        pygame.draw.rect(screen, (124, 0, 0), LD_rect)
+        word_text = "word"
+        text_noun = "noun meaning p p p p p p pppppppppppppp pp p p p p p p p p p p p p p p p p"
+        text_verb = "verb meaning very very long long very very long long very very long long very very long long very very long long very very long long very very long long very very long long "
+        rendered_word_text = font.render(word_text, True, (0, 0, 0))
+        screen.blit(rendered_word_text,(20,500))
+        draw_wrapped_text(text_noun, font20, (0,0,0), screen, 5, 560, 410)
+        draw_wrapped_text(text_verb, font20, (0,0,0), screen, 5, 620, 410)
+
+
+def draw_wrapped_text(text, font, color, surface, x, y, max_width):
+    words = [word.split(' ') for word in text.splitlines()]  # แบ่งข้อความเป็นคำ
+    space = font.size(' ')[0]  # ขนาดของช่องว่างระหว่างคำ
+
+    x_pos, y_pos = x, y
+    for line in words:
+        for word in line:
+            word_surface = font.render(word, True, color)
+            word_width, word_height = word_surface.get_size()
+
+            if x_pos + word_width >= x + max_width:
+                    x_pos = x  # ย้ายไปที่จุดเริ่มต้นของบรรทัดถัดไป
+                    y_pos += word_height  # ขึ้นบรรทัดใหม่
+
+            surface.blit(word_surface, (x_pos, y_pos))
+            x_pos += word_width + space
+        x_pos = x
+        y_pos += word_height
+
+
+
+
+
 
 #Player
 p1 = Charecter(100,20)
@@ -165,8 +211,7 @@ while running:
                         create_button_onstack = Button(button.text, GRAY, clicked_times *60, 100 , table_width, table_height)
                         stack_button.append((create_button_onstack,button.x,button.y,clicked_times))
                         atk += button.text
-                        print('stack:\n',stack_button,len(stack_button))
-                        print('table:\n',table_button,len(table_button))
+                        
                 for pos,button in enumerate(stack_button):
                     draw_button_inStack = button[0].draw(BLACK, 0)
                     if draw_button_inStack:
@@ -203,6 +248,8 @@ while running:
         #This for playing
         screen.fill(background_color)
         pygame.draw.rect(screen, GRAY, (0, 480, 1080, 300))
+        m1.show_info()
+        m1.show_meaning()
         p1.Load_Skin(100,200)
         p1.showHp(10,25)
         m1.Load_Skin(800,200)
@@ -221,10 +268,11 @@ while running:
                     m1.showHp(800,25)
                     m1.Attack(p1)
                     p1.showHp(10,25)
+
                     words=[]
-                    dictionary=PyDictionary(atk)
-                    o = dictionary.meaning(atk)
-                    print(o['Noun'][0])
+                    #dictionary=PyDictionary(atk)
+                    #o = dictionary.meaning(atk)
+                    #print(o['Noun'][0])
                     atk = ''
                     
                     for button in stack_button:
