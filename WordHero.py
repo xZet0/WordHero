@@ -252,7 +252,6 @@ while running:
     logo = pygame.image.load('logo_hero.png')
     screen.blit(menu_forest_bg,(0,0)) 
     screen.blit(logo,(170,117))
-    screen.blit(dmg_icon,(700,900))
     
     if game_state == 'menu':
         if play_button.draw(WHITE,0):
@@ -269,8 +268,10 @@ while running:
         screen.fill(background_color)
         screen.blit(gameplay_forest_bg,(0,-200))
         pygame.draw.rect(screen, GRAY, (0, 480, 1080, 300))
+        
         m1.show_info()
         m1.show_meaning()
+        screen.blit(dmg_icon,(870,587))
         p1.showHp(10,25)
         m1.showHp(800,25)
         p1.Load_Skin(100,170,knight)
