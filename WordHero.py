@@ -1,6 +1,6 @@
 import pygame
 import random
-from PyDictionary import PyDictionary
+#from PyDictionary import PyDictionary
 import enchant
 import sys
 
@@ -28,6 +28,19 @@ GRAY = (169,169,169)
 fps = 60
 timer = pygame.time.Clock()
 
+# background image
+menu_forest_bg = pygame.image.load('menu_screen.png')
+gameplay_forest_bg = pygame.image.load('playing_background.png')
+
+# monster and player imgage
+
+knight = pygame.image.load('the knight.png')
+monster1 = pygame.image.load('monster1.png')
+
+# icon
+dmg_icon = pygame.image.load('swords.png')
+logo = pygame.image.load('logo_hero.png')
+
 # Font
 font = pygame.font.Font(None, 42)
 
@@ -46,7 +59,6 @@ class Button:
         self.rect = pygame.Rect(x, y, width, height)
         self.clicked = False
         self.color_clicked = GRAY
-        self.outline_color = BLACK
         #self.action = False
         
     def draw(self, text_color, scale):
@@ -54,23 +66,31 @@ class Button:
         pos = pygame.mouse.get_pos()
                 
         pygame.draw.rect(screen, self.color, (self.x, self.y, self.width, self.height), scale)
-        pygame.draw.rect(screen, self.outline_color, (self.x, self.y, self.width, self.height), 1)
-        text = font.render(self.text, True, text_color)
-        text_rect = text.get_rect(center=(self.x + self.width / 2, self.y + self.height / 2))
-        screen.blit(text, text_rect)
+        img = font.render(self.text, True, text_color)
+        img_rect = img.get_rect(center=(self.x + self.width / 2, self.y + self.height / 2))
+        screen.blit(img, img_rect)
         
         if self.rect.collidepoint(pos):
             if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
+                #print('clicked')
                 self.clicked = True
+                #self.action = True
                 action = True
         if self.clicked:
             pygame.draw.rect(screen, self.color_clicked, (self.x, self.y, self.width, self.height), scale)
-            
-
+            #self.clicked = False
+        #else:
+            #self.clicked = True
+        
+        #return action
         return action
+    
 
 
-letter_values = {
+
+
+table = []
+c = {
     'A':1,'E':1,'I':1,'O':1,'U':1,'L':1,'N':1,'S':1,'T':1,'R':1,
     'D':2,'G':2,
     'B':3,'C':3,'M':3,'P':3,
@@ -82,7 +102,6 @@ letter_values = {
 
 stack = []
 words = []
-table_button = []
 atk = ''
 
 #CREATE EACH BUTTON!!!
@@ -92,36 +111,37 @@ play_button = Button('PLAY', RED, (screen_width - button_width) // 2, (screen_he
 exit_button = Button('EXIT', RED, (screen_width - button_width) // 2, (screen_height - button_height) // 2 + 100, button_width, button_height)
 attack_button = Button('Attack', RED,675,495,100,100)
 shuffle_button = Button('Shuffle', GREEN,675,610,100,100)
-
 #CREATE EACH BUTTON IN TABLE!!!
 table_width = 60
 table_height = 60
 for i in range(4):
     for j in range(4):
-        letter = random.choice(list(letter_values.keys()))
+        letter = random.choice(list(c.keys()))
         button = Button(letter, WHITE, j * table_width + 420, i * table_height + 480, table_width, table_height)
-        table_button.append(button)
+        table.append(button)
         stack.append(letter)
-
-
-
-
-class Charecter:
+        
+class Player:
     def __init__(self, maxhp, dmg):
         self.maxhp = maxhp
         self.Damage = dmg
         self.hp = maxhp
-    def Load_Skin(self, x, y):
+    def Load_Skin(self, x, y ,skin):
         self.x_load = x
         self.y_load = y
-        pygame.draw.rect(screen, (255,0,255), (self.x_load, self.y_load, 100, 150))
+        #pygame.draw.rect(screen, (255,0,255), (self.x_load, self.y_load, 100, 150))
+        screen.blit(skin,(self.x_load, self.y_load))
 
     def showHp(self,x,y):
         self.posx_text = x
         self.posy_text = y
         hp_text = f"HP: {self.hp}/{self.maxhp}"
-        text = font.render(hp_text, True, BLACK)
-        screen.blit(text, (self.posx_text, self.posy_text))
+        img = font.render(hp_text, True, BLACK)
+        screen.blit(img, (self.posx_text, self.posy_text))
+
+    def Create_table(self):
+        pass
+
 
 
     def Attack(self, Target):
@@ -129,20 +149,21 @@ class Charecter:
 
     def show_info(self):
         RD_rect = pygame.Rect(800, 480, 280, 240)
-        pygame.draw.rect(screen, (124, 0, 0), RD_rect)
+        pygame.draw.rect(screen, (107,142,35), RD_rect)
         dmg_text = str(self.Damage)
         name_text = "enemy name"
         enemy_name = font.render(name_text,True,(0,0,0))
         dmg = font.render(dmg_text,True,(0,0,0))
         screen.blit(enemy_name,(850,500))
         screen.blit(dmg,(940,600))
+        screen.blit(dmg_icon,(875, 590))
     
     def show_meaning(self):
         font20 = pygame.font.Font(None, 20)
-        LD_rect = pygame.Rect(0, 480, 420, 240)
-        pygame.draw.rect(screen, (124, 0, 0), LD_rect)
+        LD_rect = pygame.Rect(0, 481, 419, 238)
+        pygame.draw.rect(screen, (144,238,144), LD_rect)
         word_text = "word"
-        text_noun = "noun meaning p p p p p p pppppppppppppp pp p p p p p p p p p p p p p p p p"
+        text_noun = "noun meaning very very long long very very long long very very long long very very long long very very long long very very long long very very long long very very long long "
         text_verb = "verb meaning very very long long very very long long very very long long very very long long very very long long very very long long very very long long very very long long "
         rendered_word_text = font.render(word_text, True, (0, 0, 0))
         screen.blit(rendered_word_text,(20,500))
@@ -174,9 +195,13 @@ def draw_wrapped_text(text, font, color, surface, x, y, max_width):
 
 
 
+class Monster(Player):
+    pass
+
+
 #Player
-p1 = Charecter(100,20)
-m1 = Charecter(50,20)
+p1 = Player(100,20)
+m1 = Monster(20,10)
 
 
 
@@ -184,10 +209,12 @@ m1 = Charecter(50,20)
 # Game loop
 game_state = "menu"
 turn = "player"
-#print(stack)
-stack_button = []
-clicked_times = 0
-
+print(stack)
+n = []
+h = 0
+ok = []
+no = 0
+x = 1
 running = True
 while running:
     
@@ -197,43 +224,48 @@ while running:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:  # Check for left mouse button click
-                
-                #Click in table
-                for button in table_button:
-                    draw_button_inTable = button.draw(BLACK, 0)
+                for button in table:
+                    action = button.draw(BLACK, 0)
                     pygame.time.wait(10)
-                    #Clicked
-                    if draw_button_inTable:
-                        clicked_times += 1
+                    if action:
+                        h += 1
+                        print('Clicked on:', button.text)    
+                        k = Button(button.text, GRAY, h *60, 100 , table_width, table_height)
+                        n.append((k,button.x,button.y))
+                        print('x',((button.x-420)/60))
+                        print('y',((button.y-480)/60))
                         stack.remove(button.text)
-                        table_button.remove(button)
+                        table.remove(button)
                         words.append(button.text)
-                        create_button_onstack = Button(button.text, GRAY, clicked_times *60, 100 , table_width, table_height)
-                        stack_button.append((create_button_onstack,button.x,button.y,clicked_times))
+                        print(stack)
+                        print(words)
                         atk += button.text
-                        
-                for pos,button in enumerate(stack_button):
-                    draw_button_inStack = button[0].draw(BLACK, 0)
-                    if draw_button_inStack:
+                        print(atk)
+                        #turn = "monster"  # Switch to monster turn after player's turn
+                        #print(n)
+                for g in n:
+                    actions = g[0].draw(BLACK, 0)
+                    if actions:
                         pygame.time.wait(10)
-                        
-                        button[0].color_clicked = background_color
-                        
-                        if button[0].text == '':
-                            continue
-                        
-                        if button[3] <= len(stack_button):
-                            for i in range(button[3]-1,len(stack_button)):
-                                stack.append(words[pos])
-                                create_button_intable = Button(words[pos], WHITE, stack_button[pos][1],stack_button[pos][2], table_height, table_height)
-                                table_button.append(create_button_intable)
-                                del words[pos]
-                                del stack_button[pos]       
-                                atk = atk[:-1]
-                                clicked_times-=1
-    
-    #SET BACKGROUND
-    screen.fill(background_color)
+                        g[0].color_clicked = background_color
+                        #kuy = Button(g[0].text, GRAY, g[1], g[2], table_height, table_height)
+                        kuy = Button(g[0].text, WHITE, g[1], g[2], table_height, table_height)
+                        table.append(kuy)
+                        stack.append(g[0].text)
+                        words.remove(g[0].text)
+                        print('s',stack)
+                        print('w',words)
+                        h=0
+                        atk = atk[:-1]
+                        print('atk:',atk)
+                        #print(g[1])
+                        #print(g[2])
+                              
+    screen.fill(background_color) 
+    #background image
+    screen.blit(menu_forest_bg,(0,0))
+    #pygame.draw.rect(screen, WHITE, pygame.Rect(170, 117, 740, 117))
+    screen.blit(logo,(170,117))
     
     if game_state == 'menu':
         if play_button.draw(WHITE,0):
@@ -247,92 +279,73 @@ while running:
         screen.fill(BLACK)
         #This for playing
         screen.fill(background_color)
+        screen.blit(gameplay_forest_bg,(0,-200))
         pygame.draw.rect(screen, GRAY, (0, 480, 1080, 300))
         m1.show_info()
         m1.show_meaning()
-        p1.Load_Skin(100,200)
+        p1.Load_Skin(100,170,knight)
         p1.showHp(10,25)
-        m1.Load_Skin(800,200)
+        m1.Load_Skin(800,200,monster1)
         m1.showHp(800,25)
         
+        #hoo = 0
+        #for i in words:
+            #Button(i, GRAY, hoo*60, 50,60,60).draw(BLACK,0)
+            #hoo +=1 
+            
             
         if turn == "player":
             attack_button.clicked = False
             shuffle_button.clicked = False
-            
-            if attack_button.draw(BLACK,0) and len(atk) >= 3:
-                pygame.time.wait(100)
-        
-                if us.check(atk):
+            #print(len(atk))
+            if attack_button.draw(BLACK,0): #and len(atk) >= 3:
+                    pygame.time.wait(100)
+                #if us.check(atk):
                     p1.Attack(m1)
                     m1.showHp(800,25)
                     m1.Attack(p1)
                     p1.showHp(10,25)
-
-                    words=[]
-                    #dictionary=PyDictionary(atk)
-                    #o = dictionary.meaning(atk)
-                    #print(o['Noun'][0])
-                    atk = ''
-                    
-                    for button in stack_button:
-                        button[0].color = background_color
-                        button[0].color_clicked = background_color
-                        button[0].outline_color = background_color
-                        button[0].text = ''
-                        
-                        letter = random.choice(list(letter_values.keys()))
-                        randomly_button = Button(letter,WHITE,button[1], button[2], table_width, table_height)
-                        table_button.append(randomly_button)
-                        stack.append(letter)  
-                else:
-                    for button in stack_button:
-                        button[0].color = background_color
-                        button[0].color_clicked = background_color
-                        button[0].outline_color = background_color
-                        create_button_intable = Button(button[0].text, WHITE, button[1],button[2], table_height, table_height)
-                        table_button.append(create_button_intable)
-                        stack.append(button[0].text)
+                    #turn = "monster"
+                    #print(dictionary.meaning(atk))
+                    atk = ""
                     words = []
-                    stack_button=[]
-        
-                if m1.hp <= 0:
-                    x = x + 1
-                    p1.hp = p1.maxhp
-                    m1 = Charecter(25+(x*25),10+(x*10))
-                    
-                clicked_times = 0   
-                stack_button=[]
-           
-            if shuffle_button.draw(BLACK,0) and len(words) == 0:
+                    #print(m1.hp)
+                    if m1.hp <= 0:
+                        x = x + 1
+                        p1.hp = p1.maxhp
+                        m1 = Monster(20+(x*5),10+(x*5))
+
+            if shuffle_button.draw(BLACK,0):
                 pygame.time.wait(100)
-                table_button = []
+                table = []
                 stack = []
                 for i in range(4):
                     for j in range(4):
-                        letter = random.choice(list(letter_values.keys()))
+                        letter = random.choice(list(c.keys()))
                         button = Button(letter, WHITE, j * table_width + 420, i * table_height + 480, table_width, table_height)
-                        table_button.append(button)
+                        table.append(button)
                         stack.append(letter)
 
                 m1.Attack(p1)
                 p1.showHp(10,25)
                 
         #TABLE        
-        for button in table_button:
+        for button in table:
             button.draw(BLACK, 0)
         
+        for but in n:
+            but[0].draw(BLACK,0)
         
-        
-        for button in stack_button:
-            button[0].draw(BLACK,0)
+        #for bda in ok:
+            #bda.draw(BLACK, 0)
         
         
         #BG_TABLE
         for i in range(4):
             for j in range(4):
                 pygame.draw.rect(screen, BLACK, (j * table_width + 420, i * table_height + 480, table_width, table_height), 1)    
-                
+
+
         
     pygame.display.flip()
     timer.tick(fps)
