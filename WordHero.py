@@ -105,6 +105,8 @@ play_button = Button('PLAY', RED, (screen_width - button_width) // 2, (screen_he
 exit_button = Button('EXIT', RED, (screen_width - button_width) // 2, (screen_height - button_height) // 2 + 100, button_width, button_height)
 attack_button = Button('Attack', RED,675,495,100,100)
 shuffle_button = Button('Shuffle', GREEN,675,610,100,100)
+playagain_button = Button('Play Again', RED,440,200,200,100)
+mainmenu_button = Button('Main Menu', RED,440,350,200,100)
 
 #CREATE EACH BUTTON IN TABLE!!!
 table_width = 60
@@ -201,7 +203,9 @@ turn = "player"
 x = 1 #wave n
 #print(stack)
 stack_button = []
+gameover_button = []
 clicked_times = 0
+started = False
 
 running = True
 while running:
@@ -232,10 +236,10 @@ while running:
                     if draw_button_inStack:
                         pygame.time.wait(10)
                         
-                        button[0].color_clicked = background_color
+                        #button[0].color_clicked = background_color
                         
-                        if button[0].text == '':
-                            continue
+                        #if button[0].text == '':
+                            #continue
                         
                         if button[3] <= len(stack_button):
                             for i in range(button[3]-1,len(stack_button)):
@@ -255,7 +259,9 @@ while running:
     screen.blit(logo,(170,117))
     
     if game_state == 'menu':
+
         if play_button.draw(WHITE,0):
+            play_button.clicked = False
             #print('PLAY')
             game_state = 'play'
         if exit_button.draw(WHITE,0):
@@ -266,10 +272,14 @@ while running:
         screen.fill(BLACK)
         #This for playing
         screen.fill(background_color)
-        screen.fill(background_color)
         screen.blit(gameplay_forest_bg,(0,-200))
         pygame.draw.rect(screen, GRAY, (0, 480, 1080, 300))
-        
+
+        if started == False:
+            p1 = Charecter(100,20)
+            m1 = Charecter(50,20)
+            started = True
+
         m1.show_info()
         m1.show_meaning()
         screen.blit(dmg_icon,(870,587))
@@ -280,18 +290,30 @@ while running:
             
         if turn == "player":
             #GAMEOVER
-            #Stone plz do this
             if p1.hp <= 0:
                 #Go menu or play again
                 #create rectangle on center of screen and then create 2 button menu or play again
-                #if go menu:
+
                 
-                    #game_state = 'menu'
+
+                #if go menu:
+                if mainmenu_button.draw(BLACK,0):
+                    pygame.time.wait(100)
+
+                    del mainmenu_button
+                    mainmenu_button = Button('Main Menu', RED,440,350,200,100)
+                    started = False
+                    game_state = 'menu'
+
+                
+                if playagain_button.draw(BLACK,0):
+                    pygame.time.wait(100)
+                    p1 = Charecter(100,20)
+                    m1 = Charecter(50,20)
+                    playagain_button.clicked = False
                     
-                #else:
-                    #p1 = Charecter(100,20)
-                    #m1 = Charecter(50,20)
-                pass
+                    
+                #pass
             attack_button.clicked = False
             shuffle_button.clicked = False
             
@@ -318,20 +340,12 @@ while running:
                     
                     
                     for button in stack_button:
-                        button[0].color = background_color
-                        button[0].color_clicked = background_color
-                        button[0].outline_color = background_color
-                        button[0].text = ''
-                        
                         letter = random.choice(list(letter_values.keys()))
                         randomly_button = Button(letter,WHITE,button[1], button[2], table_width, table_height)
                         table_button.append(randomly_button)
                         stack.append(letter)  
                 else:
-                    for button in stack_button:
-                        button[0].color = background_color
-                        button[0].color_clicked = background_color
-                        button[0].outline_color = background_color
+                    for button in stack_button:   
                         create_button_intable = Button(button[0].text, WHITE, button[1],button[2], table_height, table_height)
                         table_button.append(create_button_intable)
                         stack.append(button[0].text)
