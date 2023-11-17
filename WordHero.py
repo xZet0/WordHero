@@ -324,6 +324,8 @@ while running:
                     p1.showHp(10,25)
                     print('true:',words)
                     words=[]
+
+                    tempatk = atk
                     
                     #Stone plz do this
                     #On class Charecter text is meaning!!
@@ -332,8 +334,6 @@ while running:
                     #print(o['Noun'][0])
 
                     if o != None:
-
-                        tempatk = atk
 
                         if 'Noun' in o.keys():
                             atknoun = o['Noun'][0]
@@ -349,8 +349,8 @@ while running:
                         o = 0
                     
                     if o == 0:
-                        atknoun = '0'
-                        atkverb = '0'
+                        tempatknoun = 'NOT NOUN'
+                        tempatkverb = 'NOT VERB'
                     
                     atk = ''
                     atknoun = ''
