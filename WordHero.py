@@ -252,7 +252,7 @@ while running:
     logo = pygame.image.load('logo_hero.png')
     screen.blit(menu_forest_bg,(0,0)) 
     screen.blit(logo,(170,117))
-    
+    screen.blit(dmg_icon,(700,900))
     
     if game_state == 'menu':
         if play_button.draw(WHITE,0):
