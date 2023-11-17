@@ -278,6 +278,19 @@ while running:
         m1.Load_Skin(800,200,monster1)
             
         if turn == "player":
+            #GAMEOVER
+            #Stone plz do this
+            if p1.hp <= 0:
+                #Go menu or play again
+                #create rectangle on center of screen and then create 2 button menu or play again
+                #if go menu:
+                
+                    #game_state = 'menu'
+                    
+                #else:
+                    #p1 = Charecter(100,20)
+                    #m1 = Charecter(50,20)
+                pass
             attack_button.clicked = False
             shuffle_button.clicked = False
             
@@ -291,10 +304,17 @@ while running:
                     p1.showHp(10,25)
 
                     words=[]
+                    
+                    #Stone plz do this
+                    #On class Charecter text is meaning!!
                     #dictionary=PyDictionary(atk)
                     #o = dictionary.meaning(atk)
                     #print(o['Noun'][0])
+                    
                     atk = ''
+                    
+                    
+                    
                     
                     for button in stack_button:
                         button[0].color = background_color
@@ -338,7 +358,8 @@ while running:
 
                 m1.Attack(p1)
                 p1.showHp(10,25)
-                
+            
+            
         #TABLE        
         for button in table_button:
             button.draw(BLACK, 0)
