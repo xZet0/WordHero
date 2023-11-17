@@ -34,7 +34,20 @@ font = pygame.font.Font(None, 42)
 
 #LANGUAGE
 us = enchant.Dict('en_US')
+# background image
+menu_forest_bg = pygame.image.load('menu_screen.png')
+gameplay_forest_bg = pygame.image.load('playing_background.png')
+
+# monster and player imgage
+
+knight = pygame.image.load('the knight.png')
+monster1 = pygame.image.load('monster1.png')
+
+# icon
+dmg_icon = pygame.image.load('swords.png')
+logo = pygame.image.load('logo_hero.png')
 #UI
+
 # Define Button class
 class Button:
     def __init__(self, text, color, x, y, width, height):
@@ -80,7 +93,6 @@ class Button:
 
 
 letter_values = {
-letter_values = {
     'A':1,'E':1,'I':1,'O':1,'U':1,'L':1,'N':1,'S':1,'T':1,'R':1,
     'D':2,'G':2,
     'B':3,'C':3,'M':3,'P':3,
@@ -121,16 +133,11 @@ for i in range(4):
 
 
 class Charecter:
-
-
-
-
-class Charecter:
     def __init__(self, maxhp, dmg):
         self.maxhp = maxhp
         self.Damage = dmg
         self.hp = maxhp
-    def Load_Skin(self, x, y):
+        
     def Load_Skin(self, x, y):
         self.x_load = x
         self.y_load = y
@@ -195,8 +202,6 @@ def draw_wrapped_text(text, font, color, surface, x, y, max_width):
 
 
 #Player
-p1 = Charecter(100,20)
-m1 = Charecter(50,20)
 p1 = Charecter(100,20)
 m1 = Charecter(50,20)
 
@@ -301,10 +306,6 @@ while running:
             attack_button.clicked = False
             shuffle_button.clicked = False
             
-            if attack_button.draw(BLACK,0) and len(atk) >= 3:
-                pygame.time.wait(100)
-        
-                if us.check(atk):
             
             if attack_button.draw(BLACK,0) and len(atk) >= 3:
                 pygame.time.wait(100)
@@ -349,17 +350,7 @@ while running:
                 clicked_times = 0   
                 stack_button=[]
            
-            if shuffle_button.draw(BLACK,0) and len(words) == 0:
-                    stack_button=[]
         
-                if m1.hp <= 0:
-                    x = x + 1
-                    p1.hp = p1.maxhp
-                    m1 = Charecter(25+(x*25),10+(x*10))
-                    
-                clicked_times = 0   
-                stack_button=[]
-           
             if shuffle_button.draw(BLACK,0) and len(words) == 0:
                 pygame.time.wait(100)
                 table_button = []
@@ -379,14 +370,10 @@ while running:
                 
         #TABLE        
         for button in table_button:
-        for button in table_button:
             button.draw(BLACK, 0)
         
         
         
-        
-        for button in stack_button:
-            button[0].draw(BLACK,0)
         for button in stack_button:
             button[0].draw(BLACK,0)
         
