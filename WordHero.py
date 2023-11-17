@@ -31,6 +31,19 @@ timer = pygame.time.Clock()
 # Font
 font = pygame.font.Font(None, 42)
 
+# background image
+menu_forest_bg = pygame.image.load('menu_screen.png')
+gameplay_forest_bg = pygame.image.load('playing_background.png')
+
+# monster and player imgage
+
+knight = pygame.image.load('the knight.png')
+monster1 = pygame.image.load('monster1.png')
+
+# icon
+dmg_icon = pygame.image.load('swords.png')
+logo = pygame.image.load('logo_hero.png')
+
 #LANGUAGE
 us = enchant.Dict('en_US')
 #UI
@@ -111,10 +124,11 @@ class Charecter:
         self.maxhp = maxhp
         self.Damage = dmg
         self.hp = maxhp
-    def Load_Skin(self, x, y):
+    def Load_Skin(self, x, y ,skin):
         self.x_load = x
         self.y_load = y
-        pygame.draw.rect(screen, (255,0,255), (self.x_load, self.y_load, 100, 150))
+        #pygame.draw.rect(screen, (255,0,255), (self.x_load, self.y_load, 100, 150))
+        screen.blit(skin,(self.x_load, self.y_load))
 
     def showHp(self,x,y):
         self.posx_text = x
@@ -234,6 +248,11 @@ while running:
     
     #SET BACKGROUND
     screen.fill(background_color)
+    dmg_icon = pygame.image.load('swords.png')
+    logo = pygame.image.load('logo_hero.png')
+    screen.blit(menu_forest_bg,(0,0)) 
+    screen.blit(logo,(170,117))
+    
     
     if game_state == 'menu':
         if play_button.draw(WHITE,0):
@@ -247,14 +266,15 @@ while running:
         screen.fill(BLACK)
         #This for playing
         screen.fill(background_color)
+        screen.fill(background_color)
+        screen.blit(gameplay_forest_bg,(0,-200))
         pygame.draw.rect(screen, GRAY, (0, 480, 1080, 300))
         m1.show_info()
         m1.show_meaning()
-        p1.Load_Skin(100,200)
         p1.showHp(10,25)
-        m1.Load_Skin(800,200)
         m1.showHp(800,25)
-        
+        p1.Load_Skin(100,170,knight)
+        m1.Load_Skin(800,200,monster1)
             
         if turn == "player":
             attack_button.clicked = False
