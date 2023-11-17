@@ -198,6 +198,7 @@ m1 = Charecter(50,20)
 # Game loop
 game_state = "menu"
 turn = "player"
+x = 1 #wave n
 #print(stack)
 stack_button = []
 clicked_times = 0
@@ -302,7 +303,7 @@ while running:
                     m1.showHp(800,25)
                     m1.Attack(p1)
                     p1.showHp(10,25)
-
+                    print('true:',words)
                     words=[]
                     
                     #Stone plz do this
@@ -334,8 +335,10 @@ while running:
                         create_button_intable = Button(button[0].text, WHITE, button[1],button[2], table_height, table_height)
                         table_button.append(create_button_intable)
                         stack.append(button[0].text)
+                    print('false:',words)
                     words = []
                     stack_button=[]
+                    atk = ''
         
                 if m1.hp <= 0:
                     x = x + 1
