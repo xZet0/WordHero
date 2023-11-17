@@ -188,10 +188,10 @@ def show_meaning(word, noun, verb):
 
 
 
-
+worddamage = 0
 
 #Player
-p1 = Charecter(100,20)
+p1 = Charecter(100,worddamage)
 m1 = Charecter(50,20)
 
 
@@ -318,6 +318,12 @@ while running:
                 pygame.time.wait(100)
         
                 if us.check(atk):
+
+                    for i in atk:
+                        worddamage = worddamage + letter_values[i]
+                    
+                    p1.Damage = worddamage
+
                     p1.Attack(m1)
                     m1.showHp(800,25)
                     m1.Attack(p1)
