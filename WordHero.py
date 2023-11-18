@@ -119,13 +119,14 @@ for i in range(4):
         stack.append(letter)
 
 
-
+monster_name = ['Abyssman','Pikeclaw','Vampbeast','Nightlisk','Embercat']
 
 class Charecter:
     def __init__(self, maxhp, dmg):
         self.maxhp = maxhp
         self.Damage = dmg
         self.hp = maxhp
+        #self.name_text = random.choice(monster_name)
     def Load_Skin(self, x, y ,skin):
         self.x_load = x
         self.y_load = y
@@ -145,9 +146,9 @@ class Charecter:
 
     def show_info(self):
         RD_rect = pygame.Rect(800, 480, 280, 240)
-        pygame.draw.rect(screen, (124, 0, 0), RD_rect)
+        pygame.draw.rect(screen, (119, 107, 93), RD_rect)
         dmg_text = str(self.Damage)
-        name_text = "enemy name"
+        name_text = 'Gloomboy'
         enemy_name = font.render(name_text,True,(0,0,0))
         dmg = font.render(dmg_text,True,(0,0,0))
         screen.blit(enemy_name,(850,500))
@@ -176,7 +177,7 @@ def draw_wrapped_text(text, font, color, surface, x, y, max_width):
 def show_meaning(word, noun, verb):
         font20 = pygame.font.Font(None, 20)
         LD_rect = pygame.Rect(0, 480, 420, 240)
-        pygame.draw.rect(screen, (124, 0, 0), LD_rect)
+        pygame.draw.rect(screen, (119, 107, 93), LD_rect)
         word_text = word
         text_noun = noun
         text_verb = verb
@@ -275,7 +276,7 @@ while running:
         #This for playing
         screen.fill(background_color)
         screen.blit(gameplay_forest_bg,(0,-200))
-        pygame.draw.rect(screen, GRAY, (0, 480, 1080, 300))
+        pygame.draw.rect(screen, (235, 227, 213), (0, 480, 1080, 300))
 
         if started == False:
             p1 = Charecter(100,20)
@@ -320,7 +321,7 @@ while running:
                 if us.check(atk):
 
                     for i in atk:
-                        worddamage = worddamage + letter_values[i]
+                        worddamage = worddamage + letter_values[i] * 1.5
                     
                     p1.Damage = worddamage
 
@@ -381,7 +382,8 @@ while running:
                     x = x + 1
                     p1.hp = p1.maxhp
                     m1 = Charecter(25+(x*25),10+(x*10))
-                    
+                    m1.dmg_text = str(10+(x*10))
+                    m1.name_text = random.choice(monster_name)
                 clicked_times = 0   
                 stack_button=[]
            
