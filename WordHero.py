@@ -382,7 +382,7 @@ while running:
                     x = x + 1
                     p1.hp = p1.maxhp
                     m1 = Charecter(25+(x*25),10+(x*10))
-                    m1.dmg_text = str(10+(x*10))
+                    #m1.dmg_text = str(10+(x*10))
                     m1.name_text = random.choice(monster_name)
                 clicked_times = 0   
                 stack_button=[]
